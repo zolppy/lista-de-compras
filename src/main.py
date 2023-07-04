@@ -1,5 +1,14 @@
-import os # chamadas de sistema
+import os
 import pickle # manipulação de arquivos
+from enum import IntEnum
+
+# enumerações tornam o código mais legível
+class Menu(IntEnum):
+    ADICIONAR_ITEM = 1
+    EXIBIR_ITENS   = 2
+    ATUALIZAR_ITEM = 3
+    REMOVER_ITEM   = 4
+    SAIR           = 5
 
 # limpa o console de acordo com o sistema operacional
 def limpar_console():
@@ -10,16 +19,16 @@ def limpar_console():
 
 # carrega a lista de compras a partir do arquivo
 def carregar_lista():
-    if os.path.exists('lista_compras.pkl'):
-        with open('lista_compras.pkl', 'rb') as file:
-            return pickle.load(file)
+    if os.path.exists('dados.pkl'):
+        with open('dados.pkl', 'rb') as arquivo:
+            return pickle.load(arquivo)
     else:
         return []
 
 # salva a lista de compras no arquivo
 def salvar_lista(lista):
-    with open('lista_compras.pkl', 'wb') as file:
-        pickle.dump(lista, file)
+    with open('dados.pkl', 'wb') as arquivo:
+        pickle.dump(lista, arquivo)
 
 lista_compras = carregar_lista()
 
@@ -66,30 +75,29 @@ def remover_item():
 
 def exibir_menu():
     print('Menu:')
-    # CRUD
-    print('1. Adicionar item')  # create/criar
-    print('2. Mostrar itens')  # read/ler
-    print('3. Atualizar item')  # update/atualizar
-    print('4. Remover item')  # delete/remover
+    print('1. Adicionar item')
+    print('2. Mostrar itens')
+    print('3. Atualizar item')
+    print('4. Remover item')
     print('5. Sair')
 
 while True:
     exibir_menu()
-    opcao = input('Digite o número da operação desejada: ')
+    opcao = int(input('Digite o número da operação desejada: '))
 
-    if opcao == '1':
+    if opcao == Menu.ADICIONAR_ITEM:
         limpar_console()
         adicionar_item()
-    elif opcao == '2':
+    elif opcao == Menu.EXIBIR_ITENS:
         limpar_console()
         mostrar_itens()
-    elif opcao == '3':
+    elif opcao == Menu.ATUALIZAR_ITEM:
         limpar_console()
         atualizar_item()
-    elif opcao == '4':
+    elif opcao == Menu.REMOVER_ITEM:
         limpar_console()
         remover_item()
-    elif opcao == '5':
+    elif opcao == Menu.SAIR:
         limpar_console()
         print('Até mais!')
         break
