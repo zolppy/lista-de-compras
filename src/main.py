@@ -1,105 +1,104 @@
 import os
-import pickle # manipulação de arquivos
+import pickle # file handling
 from enum import IntEnum
 
-# enumerações tornam o código mais legível
+# enumerations make the code more readable
 class Menu(IntEnum):
-    ADICIONAR_ITEM = 1
-    EXIBIR_ITENS   = 2
-    ATUALIZAR_ITEM = 3
-    REMOVER_ITEM   = 4
-    SAIR           = 5
+    ADD_ITEM    = 1
+    SHOW_ITEMS  = 2
+    UPDATE_ITEM = 3
+    REMOVE_ITEM = 4
+    EXIT        = 5
 
-# limpa o console de acordo com o sistema operacional
-def limpar_console():
+def clear_console():
     if os.name == 'nt':  # windows
         os.system('cls')
     else:  # unix/linux/mac
         os.system('clear')
 
-# carrega a lista de compras a partir do arquivo
-def carregar_lista():
-    if os.path.exists('dados.pkl'):
-        with open('dados.pkl', 'rb') as arquivo:
-            return pickle.load(arquivo)
+# loads shopping list from file
+def load_list():
+    if os.path.exists('../data/data.pkl'):
+        with open('../data/data.pkl', 'rb') as file:
+            return pickle.load(file)
     else:
         return []
 
-# salva a lista de compras no arquivo
-def salvar_lista(lista):
-    with open('dados.pkl', 'wb') as arquivo:
-        pickle.dump(lista, arquivo)
+# saves the shopping list in the file
+def save_list(list):
+    with open('../data/data.pkl', 'wb') as file:
+        pickle.dump(list, file)
 
-lista_compras = carregar_lista()
+shopping_list = load_list()
 
-def adicionar_item():
-    item = input('Digite o nome do item a ser adicionado: ')
-    lista_compras.append(item)
-    salvar_lista(lista_compras)
-    print(f"Item '{item}' adicionado à lista de compras.")
+def add_item():
+    item = input('Enter the name of the item to be added: ')
+    shopping_list.append(item)
+    save_list(shopping_list)
+    print(f"Item '{item}' added to shopping list.")
 
-def mostrar_itens():
-    print('Lista de compras:')
-    if lista_compras:
-        for i, item in enumerate(lista_compras, start=1):
+def show_items():
+    print('Shopping list:')
+    if shopping_list:
+        for i, item in enumerate(shopping_list, start=1):
             print(f"{i}. {item}")
     else:
-        print('A lista de compras está vazia.')
+        print('The shopping list is empty.')
 
-def atualizar_item():
-    mostrar_itens()
-    if lista_compras:
-        indice = int(input('Digite o número do item a ser atualizado: '))
-        if 1 <= indice <= len(lista_compras):
-            novo_item = input('Digite o novo nome do item: ')
-            lista_compras[indice - 1] = novo_item
-            salvar_lista(lista_compras)
-            print('Item atualizado com sucesso.')
+def update_item():
+    show_items()
+    if shopping_list:
+        index = int(input('Enter the number of the item to be updated: '))
+        if 1 <= index <= len(shopping_list):
+            novo_item = input('Enter the new item name: ')
+            shopping_list[index - 1] = novo_item
+            save_list(shopping_list)
+            print('Item updated successfully.')
         else:
-            print('Índice inválido.')
+            print('Invalid index.')
     else:
-        print('A lista de compras está vazia.')
+        print('The shopping list is empty.')
 
-def remover_item():
-    mostrar_itens()
-    if lista_compras:
-        indice = int(input('Digite o número do item a ser removido: '))
-        if 1 <= indice <= len(lista_compras):
-            item_removido = lista_compras.pop(indice - 1)
-            salvar_lista(lista_compras)
-            print(f"Item '{item_removido}' removido da lista de compras.")
+def remove_item():
+    show_items()
+    if shopping_list:
+        index = int(input('Enter the number of the item to be removed: '))
+        if 1 <= index <= len(shopping_list):
+            target = shopping_list.pop(index - 1)
+            save_list(shopping_list)
+            print(f"Item '{target}' removed from shopping list.")
         else:
-            print('Índice inválido.')
+            print('Invalid index.')
     else:
-        print('A lista de compras está vazia.')
+        print('The shopping list is empty.')
 
-def exibir_menu():
+def show_menu():
     print('Menu:')
-    print('1. Adicionar item')
-    print('2. Mostrar itens')
-    print('3. Atualizar item')
-    print('4. Remover item')
-    print('5. Sair')
+    print('1. Add item')
+    print('2. Show items')
+    print('3. Update item')
+    print('4. Remove item')
+    print('5. Exit')
 
 while True:
-    exibir_menu()
-    opcao = int(input('Digite o número da operação desejada: '))
+    show_menu()
+    option = int(input('Enter the number of the desired option: '))
 
-    if opcao == Menu.ADICIONAR_ITEM:
-        limpar_console()
-        adicionar_item()
-    elif opcao == Menu.EXIBIR_ITENS:
-        limpar_console()
-        mostrar_itens()
-    elif opcao == Menu.ATUALIZAR_ITEM:
-        limpar_console()
-        atualizar_item()
-    elif opcao == Menu.REMOVER_ITEM:
-        limpar_console()
-        remover_item()
-    elif opcao == Menu.SAIR:
-        limpar_console()
-        print('Até mais!')
+    if option == Menu.ADD_ITEM:
+        clear_console()
+        add_item()
+    elif option == Menu.SHOW_ITEMS:
+        clear_console()
+        show_items()
+    elif option == Menu.UPDATE_ITEM:
+        clear_console()
+        update_item()
+    elif option == Menu.REMOVE_ITEM:
+        clear_console()
+        remove_item()
+    elif option == Menu.EXIT:
+        clear_console()
+        print('Goodbye.')
         break
     else:
-        print('Opção inválida. Tente novamente.')
+        print('Invalid option. Try again.')
